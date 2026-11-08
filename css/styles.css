@@ -572,3 +572,182 @@ html[data-theme="light"] .demo-banner { background: #e9ecf1; }
 .theme-toggle:hover { color: var(--text); border-color: var(--text); }
 .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .theme-toggle .icon { width: 18px; height: 18px; }
+
+/* =========================================================================
+   PHONE LAYOUT (screens 720px wide or less only — the computer version is untouched)
+   Shorter page, whole photos instead of cropped ones, compact confirmation.
+   ========================================================================= */
+@media (max-width: 720px) {
+  /* hero: the whole photo on top (no cropping), the text underneath */
+  .cine { min-height: 0; display: block; background: #070a11; }
+  .cine-slides { inset: 0 0 auto 0; height: auto; aspect-ratio: 3 / 2; }
+  .cine-slides img { object-position: 50% 50% !important; }
+  .cine::before { inset: 0 0 auto 0; height: auto; aspect-ratio: 3 / 2; background: linear-gradient(0deg, #070a11 0%, rgba(7,10,17,0) 40%); }
+  .cine-bottom { padding-top: calc(66.67vw - 20px); padding-bottom: 18px; gap: 22px; }
+  .cine .kicker { margin-bottom: 10px; font-size: 13px; }
+  .cine h1 { font-size: 38px; }
+  .cine-sub { margin-top: 14px; font-size: 16px; line-height: 1.5; }
+  .hero-ctas { margin-top: 22px; }
+  .hero-ctas .btn-ghost { display: none; } /* "how it works" is in the menu */
+  .cine-card { padding-top: 14px; }
+  .cine-card .name { font-size: 20px; }
+  .cine-card .desc { display: none; }
+  .cine-cta { margin-top: 4px; }
+  .cine-progress { padding-bottom: 18px; }
+
+  /* photo band: whole photo, headline underneath */
+  .statement { min-height: 0; display: block; margin-top: 64px; background: #070a11; }
+  .statement img { position: relative; inset: auto; display: block; height: auto; aspect-ratio: 3 / 2; }
+  .statement::before { inset: 0 0 auto 0; height: auto; aspect-ratio: 3 / 2; background: linear-gradient(0deg, #070a11 0%, rgba(7,10,17,0) 45%); }
+  .statement-in { position: relative; margin-top: -40px; padding-bottom: 8px; gap: 16px; }
+  .statement h2 { font-size: 34px; }
+  .statement p { min-width: 0; }
+
+  /* tighter spacing everywhere */
+  .section { padding-top: 64px; }
+  .sec-head { margin-bottom: 22px; padding-bottom: 12px; }
+  .split, .split-head { gap: 14px; }
+  .split-head { margin-bottom: 26px; }
+  .h2 { font-size: 30px; }
+  .lead { font-size: 16px; }
+  .band { margin-top: 64px; padding: 44px 0; }
+  .band + .section { padding-top: 64px; }
+  .faq summary { padding: 18px 0; font-size: 17px; gap: 16px; }
+  .faq details p { padding: 0 0 18px; font-size: 15px; }
+  .site-footer { margin-top: 64px; padding-top: 36px; }
+  .footer-top { gap: 28px; }
+  .footer-mark { margin-top: 28px; }
+
+  /* budget gauge */
+  .dial-left, .dial-right { padding: 20px; }
+  .dial-left { gap: 16px; }
+  .dial-gauge { max-width: 280px; }
+  .dial-value { font-size: 40px; }
+  .next-list li { padding: 12px 0; }
+  .next-list strong { font-size: 17px; }
+  .next-list div > span { font-size: 14px; }
+
+  /* the 3 steps: number beside the title instead of above it */
+  .steps { gap: 22px; }
+  .steps li { grid-template-columns: 52px 1fr; column-gap: 12px; row-gap: 4px; padding-top: 16px; }
+  .step-no { grid-row: 1 / span 2; font-size: 38px; margin: 0; }
+  .steps h3 { font-size: 19px; }
+  .steps p { font-size: 15px; }
+
+  /* request page */
+  .page-head { padding-top: 32px; padding-bottom: 22px; }
+  .page-head .h1 { font-size: 36px; }
+  .page-head .lead { margin-top: 12px; }
+  .panel { padding: 20px; }
+  .request-layout .summary-card { display: none; } /* the summary repeats the form; the confirmation shows it all */
+  .form { gap: 20px; }
+  .form fieldset.group { gap: 18px; }
+  .form legend.step-title { font-size: 24px; margin-bottom: 18px; }
+  .steps-bar { margin-bottom: 24px; }
+
+  /* confirmation ("Merci") */
+  .done-wrap { padding-top: 28px; }
+  .done-grid { gap: 28px; }
+  .confirm { gap: 12px; }
+  .confirm .icon-ring { width: 40px; height: 40px; }
+  .confirm .h1 { font-size: 36px; }
+  .confirm .lead { font-size: 16px; }
+  .confirm .next-list li { padding: 10px 0; }
+  .confirm .next-list div > span { display: none; } /* titles only on phones */
+  .confirm .row-btns { margin-top: 12px; }
+  .t-banner { padding: 18px 20px; }
+  .t-banner-txt { font-size: 30px; }
+  .t-banner-ic { width: 62px; }
+  .done-card.ticket .t-band { padding: 18px 20px 20px; }
+  .t-veh { margin-top: 18px; font-size: 24px; }
+  .done-card.ticket .spec-table { padding: 8px 20px 14px; }
+  .done-card.ticket .spec-table > div { grid-template-columns: minmax(0, .8fr) minmax(0, 1.4fr); gap: 12px; padding: 10px 0; }
+  .done-card.ticket .spec-table dt { font-size: 13px; }
+  .done-card.ticket .spec-table dd { font-size: 14px; overflow-wrap: break-word; }
+}
+
+/* =========================================================================
+   PHONE POLISH (phones only: 720px wide or less). Computers never see any of this.
+   ========================================================================= */
+.m-only { display: none; } /* phone-only elements: hidden on every larger screen */
+@keyframes menu-in { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+@media (max-width: 720px) {
+  button, a, summary, label { -webkit-tap-highlight-color: transparent; }
+
+  /* header: logo · FR/EN · menu (the light/dark switch moves into the menu) */
+  .header-in { height: 60px; }
+  .header-actions { gap: 4px; }
+  .header-actions .theme-toggle { display: none; }
+  .lang-switch button { min-height: 40px; padding: 8px 6px; }
+  .nav-toggle { margin-right: -10px; }
+
+  /* menu: full screen, big tappable links, page underneath stays still */
+  html.nav-open, html.nav-open body { overflow: hidden; }
+  html.nav-open .site-header { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--bg); }
+  .main-nav { position: fixed; top: 60px; left: 0; right: 0; bottom: 0; z-index: 70; padding: 8px 20px calc(24px + env(safe-area-inset-bottom)); overflow-y: auto; border-bottom: 0; background: var(--bg); }
+  .main-nav.open { display: flex; animation: menu-in .22s var(--ease) both; }
+  .main-nav a { padding: 20px 0; font-size: 28px; }
+  .main-nav .nav-theme { display: flex; align-items: center; gap: 12px; padding: 20px 0; border: 0; border-bottom: 1px solid var(--line); background: none; color: var(--muted); font: inherit; font-size: 16px; text-align: left; cursor: pointer; }
+  .main-nav .nav-theme .icon { width: 20px; height: 20px; }
+  .main-nav .nav-cta-mobile { margin-top: auto !important; min-height: 56px; justify-content: center; }
+
+  /* type + rhythm */
+  .h2 { font-size: 28px; line-height: 1.06; }
+  .section { padding-top: 56px; }
+  .band { margin-top: 56px; padding: 40px 0; }
+  .band + .section { padding-top: 56px; }
+  .sec-head { margin-bottom: 20px; font-size: 13px; }
+
+  /* hero */
+  .cine h1 { font-size: 36px; line-height: 1; }
+  .cine-bottom { gap: 20px; }
+  .cine-progress { gap: 8px; }
+  .cine-progress button { padding: 8px 0; } /* bigger tap area */
+
+  /* budget: gauge + slider + one button (the "what we'll ask" list is skipped on phones) */
+  .dial-right .dial-count, .dial-right .next-list, .dial-right .picked { display: none; }
+  .dial-right { border-top: 0; padding-top: 0; }
+  .dial-go { margin-top: 4px; flex-direction: column; align-items: stretch; gap: 10px; text-align: center; }
+  .dial-go .btn { min-height: 54px; }
+
+  /* lists with numbers (dealers page) */
+  .features li, .lanes li { padding: 18px 0; gap: 4px 10px; grid-template-columns: 36px 1fr; }
+  .features h3, .lanes h3 { font-size: 19px; margin-bottom: 2px; }
+  .features p, .lanes p { font-size: 15px; }
+
+  /* photo headers on inner pages: whole photo, title underneath */
+  .page-hero { min-height: 0; display: block; background: #070a11; }
+  .page-hero-img { position: relative; inset: auto; display: block; height: auto; aspect-ratio: 3 / 2; }
+  .page-hero::before { inset: 0 0 auto 0; height: auto; aspect-ratio: 3 / 2; background: linear-gradient(0deg, #070a11 0%, rgba(7,10,17,0) 45%); }
+  .page-hero-in { position: relative; margin-top: -32px; padding-top: 0; padding-bottom: 28px; }
+  .page-hero .h1 { font-size: 34px; }
+  .page-hero .lead { margin-top: 12px; font-size: 16px; }
+  .page-hero + .request-layout, .page-hero + .dealers-grid { margin-top: 28px; }
+  .dealers-grid { gap: 28px; }
+  .dealers-grid .panel > .h2 { font-size: 26px; }
+  .dealers-grid .panel > .muted { margin-bottom: 20px; font-size: 15px; }
+
+  /* forms */
+  .form-foot { padding-top: 20px; gap: 10px; }
+  .form-foot .btn { min-height: 52px; }
+  .chip { min-height: 46px; }
+  .share-box { padding: 16px; }
+
+  /* footer */
+  .site-footer { margin-top: 56px; padding-top: 32px; }
+  .footer-top { gap: 24px; }
+  .footer-cols { gap: 16px; }
+  .site-footer ul a { font-size: 14.5px; }
+
+  /* request + dealer forms: no box around the form on phones, so fields use the full width */
+  .request-layout .form.panel, .dealers-grid .panel { border: 0; background: none; padding: 0; box-shadow: none; }
+  .page-head .kicker { display: none; }
+  .form-foot .spacer { display: none; }
+  .form-foot .btn { flex: 1 1 0; justify-content: center; }
+  .form-foot .btn-ghost { flex: 0 0 auto; padding: 0 18px; }
+
+  /* sticky "make a request" button on the home page */
+  .m-cta { display: flex; position: fixed; left: 16px; right: 16px; bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 55; align-items: center; justify-content: center; gap: 10px; min-height: 54px; border-radius: var(--radius-sm); background: var(--accent); color: var(--on-accent); font-weight: 500; font-size: 16px; text-decoration: none; box-shadow: 0 10px 30px rgba(0,0,0,.45); opacity: 0; transform: translateY(120%); pointer-events: none; transition: opacity .25s var(--ease), transform .25s var(--ease); }
+  .m-cta.show { opacity: 1; transform: none; pointer-events: auto; }
+  .m-cta .icon { width: 17px; height: 17px; }
+}

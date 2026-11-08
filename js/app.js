@@ -112,6 +112,7 @@
       '<a href="#/" class="brand" aria-label="' + esc(t('nav.home')) + '">' + logo() + '</a>' +
       '<nav class="main-nav' + (state.navOpen ? ' open' : '') + '" id="main-nav" aria-label="Navigation">' +
       link('#/how', 'nav.how', false) + link('#/budget', 'nav.request', r === 'request' || state.route.params.anchor === 'budget') + link('#/dealers', 'nav.dealers', r === 'dealers') +
+      '<button type="button" class="m-only nav-theme" id="theme-toggle-m">' + icon(isLight() ? 'moon' : 'sun') + '<span>' + esc(t(isLight() ? 'theme.toDark' : 'theme.toLight')) + '</span></button>' +
       '<a class="btn btn-primary nav-cta-mobile" href="#/budget">' + esc(t('nav.cta')) + icon('arrow') + '</a></nav>' +
       '<div class="header-actions"><div class="lang-switch" role="group" aria-label="' + esc(t('lang.label')) + '">' +
       '<button type="button" id="lang-fr" data-lang="fr" lang="fr" aria-pressed="' + (state.lang === 'fr') + '">FR</button>' +
@@ -167,6 +168,34 @@
     setTimeout(function () { card.innerHTML = slideCardHtml(k); card.style.opacity = 1; }, 220);
     queueSlide();
   }
+  /* phones: swipe left/right on the photo to change car */
+  var touchX = null, touchY = null;
+  document.addEventListener('touchstart', function (e) {
+    if (!e.target.closest || !e.target.closest('.cine')) { touchX = null; return; }
+    touchX = e.touches[0].clientX; touchY = e.touches[0].clientY;
+  }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (touchX === null) return;
+    var dx = e.changedTouches[0].clientX - touchX, dy = e.changedTouches[0].clientY - touchY, n = DATA.heroSlides.length;
+    touchX = null;
+    if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    showSlide((state.slide + (dx < 0 ? 1 : n - 1)) % n);
+  }, { passive: true });
+  /* phones: a "make a request" button stays at the bottom once the top of the page is out of view.
+     It steps aside whenever another request button is on screen, and over the footer. */
+  function updateMobileCta() {
+    var b = document.getElementById('m-cta');
+    if (!b) return;
+    var hero = document.querySelector('.cine'), foot = document.querySelector('.site-footer'), vh = window.innerHeight;
+    function onScreen(el) { if (!el) return false; var r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < vh - 70; }
+    var otherButton = Array.prototype.some.call(document.querySelectorAll('main .btn-primary'), onScreen); // don't double up
+    var show = hero && hero.getBoundingClientRect().bottom < 0 && !otherButton && !onScreen(foot) && !state.navOpen;
+    b.classList.toggle('show', !!show);
+    b.setAttribute('aria-hidden', show ? 'false' : 'true');
+    b.tabIndex = show ? 0 : -1;
+  }
+  var ctaTick = false;
+  window.addEventListener('scroll', function () { if (ctaTick) return; ctaTick = true; requestAnimationFrame(function () { ctaTick = false; updateMobileCta(); }); }, { passive: true });
   function queueSlide() {
     clearTimeout(slideTimer);
     if (state.route.name !== 'home' || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -508,7 +537,10 @@
     document.documentElement.lang = state.lang === 'fr' ? 'fr-CA' : 'en-CA';
     document.title = t('meta.title');
     var fresh = r.name !== lastRendered; lastRendered = r.name; // fade only when the page changes
-    app.innerHTML = header() + '<main id="main" tabindex="-1"' + (fresh ? ' class="page-in"' : '') + '>' + main + '</main>' + footer();
+    app.innerHTML = header() + '<main id="main" tabindex="-1"' + (fresh ? ' class="page-in"' : '') + '>' + main + '</main>' + footer() +
+      (r.name === 'home' ? '<a class="m-only m-cta" id="m-cta" href="#/budget" tabindex="-1" aria-hidden="true">' + esc(t('nav.cta')) + icon('arrow') + '</a>' : '');
+    document.documentElement.classList.toggle('nav-open', !!state.navOpen);
+    updateMobileCta();
     if (window.VolanteSelect) window.VolanteSelect.enhance(app); // styled dropdowns (js/select.js)
     Array.prototype.forEach.call(document.querySelectorAll('.reveal'), function (el, i) {
       var key = r.name + i;
@@ -675,7 +707,8 @@
       if (l !== state.lang) { state.lang = l; saveLang(l); var y = window.scrollY; render({ focus: langBtn.id, preventScroll: true }); window.scrollTo(0, y); }
       return;
     }
-    if (e.target.closest('#theme-toggle')) { setTheme(!isLight()); var sy = window.scrollY; render({ focus: 'theme-toggle', preventScroll: true }); window.scrollTo(0, sy); return; }
+    var themeBtn = e.target.closest('#theme-toggle, #theme-toggle-m');
+    if (themeBtn) { setTheme(!isLight()); var sy = window.scrollY; render({ focus: themeBtn.id, preventScroll: true }); window.scrollTo(0, sy); return; }
     if (e.target.closest('#nav-toggle')) { state.navOpen = !state.navOpen; render({ focus: 'nav-toggle' }); return; }
     var same = e.target.closest('a[href="#/budget"], a[href="#/how"]');
     if (same && same.getAttribute('href') === location.hash) {
