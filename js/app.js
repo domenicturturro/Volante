@@ -736,7 +736,10 @@
     if (act === 'slide') { showSlide(Number(a.getAttribute('data-i'))); return; }
     if (act === 'to-dealer-form') {
       var join = document.getElementById('dealer-join'); if (!join) return;
-      join.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
+      // land with the whole form card in view, just under the header
+      var card = join.querySelector('.panel') || join, hdr = document.querySelector('header');
+      var y = card.getBoundingClientRect().top + window.pageYOffset - (hdr ? hdr.getBoundingClientRect().height : 76) - 24;
+      window.scrollTo({ top: Math.max(0, y), behavior: REDUCED ? 'auto' : 'smooth' });
       setTimeout(function () { var f = document.getElementById('dealer-dealership'); if (f) f.focus({ preventScroll: true }); }, REDUCED ? 0 : 700);
       return;
     }
