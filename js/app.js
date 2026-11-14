@@ -333,9 +333,11 @@
       model: function (v, all) { return !all.flexible && all.make === 'Other' && !filled(v) ? 'err.otherModel' : null; },
       modelOther: function (v, all) { return !all.flexible && all.make !== 'Other' && all.model === 'other' && !filled(v) ? 'err.modelOther' : null; }, budget: RULES.budget, term: RULES.required, km: RULES.required,
       firstName: RULES.name, lastName: RULES.name, email: RULES.email, phone: RULES.phone, postal: RULES.postal, contactLang: RULES.required, contactMethod: RULES.required, consent: RULES.consent },
-    dealer: { dealership: RULES.required, location: RULES.required, contact: RULES.required, email: RULES.email }
+    dealer: { dealership: RULES.required, location: RULES.required, contact: RULES.required, email: RULES.email, phone: RULES.phone }
   };
-  var REQUEST_STEPS = [['make', 'model', 'modelOther', 'trim', 'flexible', 'body', 'fuel', 'drive', 'color'], ['budget', 'down', 'term', 'km', 'trade', 'timing'], ['firstName', 'lastName', 'email', 'phone', 'postal', 'contactLang', 'contactMethod', 'message', 'consent']];
+  /* colour label; with "Autre", the colour the visitor typed */
+  function colorText(v) { if (!v.color) return ''; var other = v.color === 'other' && v.colorOther && String(v.colorOther).trim(); return other ? t('color.other') + ' : ' + String(v.colorOther).trim() : t('color.' + v.color); }
+  var REQUEST_STEPS = [['make', 'model', 'modelOther', 'trim', 'flexible', 'body', 'fuel', 'drive', 'color', 'colorOther'], ['budget', 'down', 'term', 'km', 'trade', 'timing'], ['firstName', 'lastName', 'email', 'phone', 'postal', 'contactLang', 'contactMethod', 'message', 'consent']];
   /* extra optional choices (labels in i18n.js: fuel.*, drive.*, down.*, trade.*, timing.*) */
   var OPTS = {
     fuel: ['gas', 'hybrid', 'phev', 'electric'],
@@ -374,7 +376,7 @@
     function row(label, val) { return '<div><dt>' + esc(label) + '</dt><dd' + (val ? '' : ' class="empty-val"') + '>' + esc(val || t('request.summaryEmpty')) + '</dd></div>'; }
     var veh = vehText(v);
     return '<h2>' + esc(t('request.summary')) + '</h2><dl>' +
-      row(t('request.vehicleLabel'), veh) + (showBody(v) || v.body ? row(t('request.body'), v.body ? t('body.' + v.body) : '') : '') + row(t('request.fuel'), optLabel('fuel', v.fuel)) + row(t('request.color'), v.color ? t('color.' + v.color) : '') +
+      row(t('request.vehicleLabel'), veh) + (showBody(v) || v.body ? row(t('request.body'), v.body ? t('body.' + v.body) : '') : '') + row(t('request.fuel'), optLabel('fuel', v.fuel)) + row(t('request.color'), colorText(v)) +
       row(t('dial.label'), v.budget ? reqBudgetFmt(Number(v.budget)) : '') + row(t('request.down'), optLabel('down', v.down)) +
       row(t('request.term'), v.term ? termLabel(v.term) : '') +
       row(t('request.km'), v.km ? kmLabel(v.km) : '') +
@@ -433,7 +435,7 @@
         '<div class="row-btns"><a class="btn btn-primary btn-lg" href="#/">' + esc(t('request.done.home')) + icon('arrow') + '</a><button type="button" class="btn btn-ghost btn-lg" data-action="reset-form" data-form-id="request">' + esc(t('request.done.again')) + '</button></div></div>' +
         '<aside class="done-card ticket">' + doneBanner() + '<div class="t-band"><div class="t-top"><span class="t-wm">VOLΛNTE</span>' + (d.ref ? '<span class="t-ref">' + esc(t('done.ref', { ref: d.ref })) + '</span>' : '') + '</div>' +
         '<p class="t-veh">' + esc(vehText(d)) + '</p><p class="t-sub">' + esc(d.sentAt ? t('done.receivedOn', { date: sentAtText(d.sentAt) }) : t('request.done.summary')) + '</p></div><div class="t-cut" aria-hidden="true"></div><dl class="spec-table">' +
-        (d.body ? row('request.body', t('body.' + d.body)) : '') + (d.fuel ? row('request.fuel', optLabel('fuel', d.fuel)) : '') + (d.drive ? row('request.drive', optLabel('drive', d.drive)) : '') + (d.color ? row('request.color', t('color.' + d.color)) : '') +
+        (d.body ? row('request.body', t('body.' + d.body)) : '') + (d.fuel ? row('request.fuel', optLabel('fuel', d.fuel)) : '') + (d.drive ? row('request.drive', optLabel('drive', d.drive)) : '') + (d.color ? row('request.color', colorText(d)) : '') +
         row('request.budget', reqBudgetFmt(Number(d.budget))) + (d.down ? row('request.down', optLabel('down', d.down)) : '') + row('request.term', termLabel(d.term)) + row('request.km', kmLabel(d.km)) +
         (d.trade ? row('request.trade', optLabel('trade', d.trade)) : '') + (d.timing ? row('request.timing', optLabel('timing', d.timing)) : '') +
         row('form.postal', d.postal.toUpperCase()) + row('form.email', d.email) + (d.phone ? row('form.phone', d.phone) : '') +
@@ -459,6 +461,7 @@
         (showBody(v) ? optSelect('body', 'request.body', Object.keys(BODY).map(function (b) { return [b, t('body.' + b)]; })) : '') +
         optSelect('fuel', 'request.fuel', optList('fuel')) + optSelect('drive', 'request.drive', optList('drive')) +
         optSelect('color', 'request.color', DATA.colorOptions.map(function (c) { return [c[0], t('color.' + c[0])]; })) +
+        (v.color === 'other' ? fieldHtml('request', 'colorOther', { label: t('request.colorOther'), placeholder: t('request.colorOtherPh'), autocomplete: 'off' }) : '') +
         '</div>';
     } else if (step === 2) {
       body = fieldHtml('request', 'budget', { label: t('request.budget'), type: 'range', required: true, min: R_MIN, max: R_MAX, step: R_STEP, fmt: reqBudgetFmt }) +
@@ -498,11 +501,16 @@
         fieldHtml('dealer', 'dealership', { label: t('dealers.dealership'), required: true, autocomplete: 'organization' }) +
         fieldHtml('dealer', 'location', { label: t('dealers.location'), required: true, placeholder: t('dealers.locationPh'), autocomplete: 'address-level2' }) +
         '<div class="grid-2">' + fieldHtml('dealer', 'contact', { label: t('dealers.contact'), required: true, autocomplete: 'name' }) +
-        fieldHtml('dealer', 'email', { label: t('dealers.email'), type: 'email', required: true, autocomplete: 'work email' }) + '</div>' +
+        fieldHtml('dealer', 'email', { label: t('dealers.email'), type: 'email', required: true, autocomplete: 'work email' }) +
+        fieldHtml('dealer', 'phone', { label: t('form.phone'), type: 'tel', autocomplete: 'work tel', inputmode: 'tel', placeholder: t('dealers.phonePh') }) + '</div>' +
         '<div class="form-foot">' + submitBtn('dealer', t('dealers.submit')) + '</div>' + honeypot() + demoNote() + '</form>';
     }
-    return pageHero(DATA.pagePhotos.dealers, t('dealers.kicker'), t('dealers.title'), t('dealers.sub')) +
-      '<section class="wrap dealers-grid"><ol class="lanes">' + [1, 2, 3].map(function (n) {
+    return '<section class="dealers-hero">' + photoImg(DATA.pagePhotos.dealers, 'page-hero-img') +
+      '<div class="wrap dealers-hero-in"><p class="kicker">' + esc(t('dealers.kicker')) + '</p><h1 class="h1"><span>' + esc(t('dealers.titleA')) + '</span> <em>' + esc(t('dealers.titleB')) + '</em></h1>' +
+      '<p class="lead">' + esc(t('dealers.sub')) + '</p>' +
+      '<button type="button" class="dealers-go" data-action="to-dealer-form"><span>' + esc(t('dealers.cta')) + '</span><span class="go-ic">' + icon('arrow') + '</span></button></div>' +
+      '<button type="button" class="scroll-cue" data-action="to-dealer-form" aria-label="' + esc(t('dealers.cta')) + '"><span></span></button></section>' +
+      '<section class="wrap dealers-grid" id="dealer-join"><ol class="lanes">' + [1, 2, 3].map(function (n) {
         return '<li><span class="f-no">' + pad2(n) + '</span><div><h3>' + esc(t('dealers.p' + n + '.title')) + '</h3><p class="muted">' + esc(t('dealers.p' + n + '.text')) + '</p></div></li>';
       }).join('') + '</ol><div class="panel">' + form + '</div></section>';
   }
@@ -654,14 +662,14 @@
   /* The Sheet's columns, in order: [key, column title, value]. The script adds any column the Sheet doesn't have yet,
      so new form fields show up in the Sheet without changing the script. */
   function sheetColumns(formId, v) {
-    if (formId === 'dealer') return [['dealership', 'Concessionnaire', v.dealership], ['location', 'Ville ou adresse', v.location], ['contact', 'Personne-ressource', v.contact], ['email', 'Courriel', v.email]];
+    if (formId === 'dealer') return [['dealership', 'Concessionnaire', v.dealership], ['location', 'Ville ou adresse', v.location], ['contact', 'Personne-ressource', v.contact], ['phone', 'Téléphone', v.phone || ''], ['email', 'Courriel', v.email]];
     return [
       ['ref', 'Nº de demande', v.ref || ''], ['firstName', 'Prénom', v.firstName], ['lastName', 'Nom', v.lastName], ['email', 'Courriel', v.email], ['phone', 'Téléphone', v.phone || ''],
       ['postal', 'Code postal', String(v.postal || '').toUpperCase()],
       ['vehicle', 'Véhicule', vehText(v)], ['make', 'Marque', v.flexible ? '' : makeLabel(v.make || '')],
       ['model', 'Modèle', v.flexible ? '' : (v.model === 'other' ? v.modelOther : v.model) || ''], ['trim', 'Version', v.flexible ? '' : v.trim || ''],
       ['flexible', 'Flexible', v.flexible ? 'Oui' : 'Non'], ['body', 'Carrosserie', v.body ? t('body.' + v.body) : ''],
-      ['fuel', 'Motorisation', optLabel('fuel', v.fuel)], ['drive', 'Rouage', optLabel('drive', v.drive)], ['color', 'Couleur', v.color ? t('color.' + v.color) : ''],
+      ['fuel', 'Motorisation', optLabel('fuel', v.fuel)], ['drive', 'Rouage', optLabel('drive', v.drive)], ['color', 'Couleur', colorText(v)],
       ['budget', 'Budget mensuel max.', reqBudgetFmt(Number(v.budget))], ['down', 'Comptant', optLabel('down', v.down)],
       ['term', 'Durée', termLabel(v.term)], ['km', 'Kilométrage annuel', kmLabel(v.km)],
       ['trade', 'Échange', optLabel('trade', v.trade)], ['timing', 'Délai', optLabel('timing', v.timing)],
@@ -726,6 +734,12 @@
     }
     var act = a.getAttribute('data-action');
     if (act === 'slide') { showSlide(Number(a.getAttribute('data-i'))); return; }
+    if (act === 'to-dealer-form') {
+      var join = document.getElementById('dealer-join'); if (!join) return;
+      join.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
+      setTimeout(function () { var f = document.getElementById('dealer-dealership'); if (f) f.focus({ preventScroll: true }); }, REDUCED ? 0 : 700);
+      return;
+    }
     if (act === 'dial-go') {
       state.budgetSet = true;
       startRequest({ budget: String(state.dialBudget >= B_MAX ? R_MAX : state.dialBudget) });
@@ -757,6 +771,7 @@
     if (el.type === 'range') { var lab = reqBudgetFmt(Number(el.value)); setRangeVisual(el, lab); var out = document.getElementById(el.id + '-out'); if (out) out.textContent = lab; }
     if (formId === 'request' && el.name === 'make' && e.type === 'change') { var ml = DATA.models[el.value] || []; if (el.value === 'Other' ? ml.indexOf(F.values.model) > -1 || F.values.model === 'other' : (F.values.model && F.values.model !== 'other' && ml.indexOf(F.values.model) === -1)) F.values.model = ''; }
     if (formId === 'request' && (el.name === 'make' || (el.name === 'model' && el.tagName === 'SELECT')) && e.type === 'change') { if (F.attempted) F.errors = validate('request', REQUEST_STEPS[0]); render({ focus: el.id, preventScroll: true }); return; }
+    if (formId === 'request' && el.name === 'color' && e.type === 'change') { F.values.color = el.value; render({ focus: el.id, preventScroll: true }); var co = document.getElementById('request-colorOther'); if (co && el.value === 'other') co.focus({ preventScroll: true }); return; }
     if (formId === 'request' && el.name === 'contactMethod' && e.type === 'change') { F.values.contactMethod = el.value; if (F.attempted) F.errors = validate('request', REQUEST_STEPS[2]); render({ focus: el.id, preventScroll: true }); return; }
     if (formId === 'request' && el.name === 'flexible' && e.type === 'change') { if (F.attempted) F.errors = validate('request', REQUEST_STEPS[0]); render({ focus: el.id, preventScroll: true }); return; }
     refreshFieldError(formId, el.name);

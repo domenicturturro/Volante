@@ -133,6 +133,9 @@ window.VOLANTE_I18N = {
     'dealers.location': 'Ville ou adresse',
     'dealers.locationPh': 'Ex. Laval',
     'dealers.contact': 'Personne-ressource',
+    'dealers.cta': 'Devenir concessionnaire partenaire',
+    'dealers.titleA': 'Recevez des demandes de clients', 'dealers.titleB': 'qui ont déjà comparé.',
+    'dealers.phonePh': 'Ex. 514 555-0123',
     'dealers.email': 'Courriel professionnel',
     'dealers.submit': 'Envoyer la demande',
     'dealers.done.title': 'Merci (mode démo)',
@@ -271,6 +274,9 @@ window.VOLANTE_I18N = {
     'dealers.location': 'City or address',
     'dealers.locationPh': 'E.g. Laval',
     'dealers.contact': 'Contact person',
+    'dealers.cta': 'Become a partner dealership',
+    'dealers.titleA': 'Receive inquiries from customers', 'dealers.titleB': 'who have already compared.',
+    'dealers.phonePh': 'E.g. 514 555-0123',
     'dealers.email': 'Business email',
     'dealers.submit': 'Send inquiry',
     'dealers.done.title': 'Thank you (demo mode)',
@@ -395,12 +401,14 @@ Object.assign(window.VOLANTE_I18N.en, {
 /* Request form: optional colour preference */
 Object.assign(window.VOLANTE_I18N.fr, {
   'request.color': 'Couleur',
+  'request.colorOther': 'Précisez la couleur', 'request.colorOtherPh': 'Ex. bleu ciel, vert forêt',
   'request.anyColor': 'Aucune préférence',
   'color.black': 'Noir', 'color.white': 'Blanc', 'color.grey': 'Gris ou argent', 'color.blue': 'Bleu',
   'color.red': 'Rouge', 'color.green': 'Vert', 'color.other': 'Autre'
 });
 Object.assign(window.VOLANTE_I18N.en, {
   'request.color': 'Colour',
+  'request.colorOther': 'Specify the colour', 'request.colorOtherPh': 'E.g. sky blue, forest green',
   'request.anyColor': 'No preference',
   'color.black': 'Black', 'color.white': 'White', 'color.grey': 'Grey or silver', 'color.blue': 'Blue',
   'color.red': 'Red', 'color.green': 'Green', 'color.other': 'Other'
@@ -543,3 +551,64 @@ window.VOLANTE_I18N_LIVE = {
     'footer.copy': '© {year} Volante.'
   }
 };
+
+/* =========================================================================
+   COPY PASS (Nov 2026): plain, specific, Montréal voice. These override the
+   earlier wording above. Layout, gauge and legal text are unchanged.
+   ========================================================================= */
+Object.assign(window.VOLANTE_I18N.fr, {
+  'hero.title1': 'Votre prochaine location,',
+  'hero.title2': 'sans courir les concessionnaires.',
+  'hero.sub': 'Dites-nous quel véhicule vous voulez et combien vous voulez payer par mois. On envoie votre demande aux concessionnaires participants du Grand Montréal, et leurs options vous arrivent.',
+  'cine.desc': 'Celui-là vous plaît? Commencez votre demande avec ce modèle déjà choisi.',
+  'dial.title': 'Quel paiement mensuel vous convient?',
+  'dial.text': 'Glissez l’aiguille jusqu’à votre maximum, avant taxes. On s’en sert pour cibler les offres, et vous pourrez le changer en tout temps.',
+  'dial.next': 'Ensuite, on vous demandera',
+  'dial.s1': 'Le véhicule', 'dial.s1t': 'Une marque, un modèle, ou simplement « je suis flexible ».',
+  'dial.s2': 'La location', 'dial.s2t': 'La durée, le kilométrage et le comptant, si vous les savez.',
+  'dial.s3': 'Comment vous joindre', 'dial.s3t': 'Votre courriel, et un téléphone si vous préférez qu’on vous appelle.',
+  'statement.title': 'Vous remplissez une demande. Plusieurs concessionnaires y répondent.',
+  'how.title': 'De votre demande jusqu’aux clés.',
+  'how.1.title': 'Vous nous dites ce que vous cherchez', 'how.1.text': 'Le véhicule, votre budget et quelques préférences. Ça prend environ deux minutes.',
+  'how.2.title': 'On contacte les concessionnaires', 'how.2.text': 'Votre demande est envoyée aux concessionnaires participants, qui préparent leurs options de location. On vous les transmet par courriel ou par téléphone.',
+  'how.3.title': 'Vous choisissez, le concessionnaire finalise', 'how.3.text': 'Le concessionnaire choisi confirme la disponibilité et les conditions, puis signe la location avec vous.',
+  'faq.title': 'Les questions qu’on reçoit le plus.',
+  'dealersSection.title': 'Vous êtes concessionnaire?',
+  'dealersSection.text': 'Recevez des demandes de clients du Grand Montréal qui ont déjà indiqué le véhicule, le budget et la durée qu’ils recherchent.',
+  'footer.tag': 'Location de véhicules neufs dans le Grand Montréal, sans courir les concessionnaires.',
+  'request.sub': 'Quelques questions sur le véhicule, la location et la façon de vous joindre. Ensuite, on contacte les concessionnaires pour vous.',
+  'handoff': 'Volante n’est pas un concessionnaire. On fait le lien entre vous et les concessionnaires participants, et c’est avec eux que vous signez.',
+  'done.n1': 'On lit votre demande', 'done.n1t': 'On regarde le véhicule, le budget et la durée pour cibler les bons concessionnaires.',
+  'done.n2': 'Les offres arrivent', 'done.n2t': 'On vous transmet les options de location par courriel ou par téléphone, selon votre préférence.',
+  'done.n3': 'Vous choisissez', 'done.n3t': 'Le concessionnaire choisi confirme les détails et signe la location avec vous.',
+  'dealers.sub': 'Des clients du Grand Montréal nous disent quel véhicule ils veulent louer. On vous transmet leur demande, et vous répondez avec vos offres.',
+  'dealers.form.sub': 'Laissez-nous vos coordonnées. Quelqu’un de l’équipe Volante vous appellera ou vous écrira.'
+});
+Object.assign(window.VOLANTE_I18N.en, {
+  'hero.title1': 'Your next lease,',
+  'hero.title2': 'without the dealer runaround.',
+  'hero.sub': 'Tell us the vehicle you want and what you want to pay each month. We send your request to participating dealerships in Greater Montréal, and their options come to you.',
+  'cine.desc': 'Like this one? Start your request with this model already filled in.',
+  'dial.title': 'What monthly payment works for you?',
+  'dial.text': 'Drag the needle to your max, before taxes. We use it to narrow down the offers, and you can change it anytime.',
+  'dial.next': 'After this, we’ll ask for',
+  'dial.s1': 'The vehicle', 'dial.s1t': 'A make and model, or just “I’m flexible”.',
+  'dial.s2': 'The lease', 'dial.s2t': 'Term, mileage and down payment, if you know them.',
+  'dial.s3': 'How to reach you', 'dial.s3t': 'Your email, plus a phone number if you’d rather get a call.',
+  'statement.title': 'You fill out one request. Several dealerships answer it.',
+  'how.title': 'From your request to the keys.',
+  'how.1.title': 'You tell us what you’re after', 'how.1.text': 'The vehicle, your budget and a few preferences. It takes about two minutes.',
+  'how.2.title': 'We contact the dealerships', 'how.2.text': 'Your request goes to participating dealerships, who put together lease options. We pass them on by email or phone.',
+  'how.3.title': 'You pick, the dealership finalizes', 'how.3.text': 'The dealership you pick confirms availability and terms, then signs the lease with you.',
+  'faq.title': 'The questions we get most.',
+  'dealersSection.title': 'Run a dealership?',
+  'dealersSection.text': 'Get requests from Greater Montréal customers who have already told us the vehicle, budget and term they’re after.',
+  'footer.tag': 'New vehicle leasing in Greater Montréal, without the dealer runaround.',
+  'request.sub': 'A few questions about the vehicle, the lease and how to reach you. Then we contact the dealerships for you.',
+  'handoff': 'Volante isn’t a dealership. We connect you with participating dealerships, and you sign the lease with them.',
+  'done.n1': 'We read your request', 'done.n1t': 'We look at the vehicle, budget and term to pick the right dealerships.',
+  'done.n2': 'Offers come in', 'done.n2t': 'We send you the lease options by email or phone, whichever you prefer.',
+  'done.n3': 'You choose', 'done.n3t': 'The dealership you pick confirms the details and signs the lease with you.',
+  'dealers.sub': 'Greater Montréal customers tell us what they want to lease. We pass their request on to you, and you reply with your offers.',
+  'dealers.form.sub': 'Leave your details and someone from the Volante team will call or email you.'
+});
