@@ -933,3 +933,26 @@ html[data-theme="light"] .chip:has(input:checked) { background: rgba(var(--accen
   .how-sec .split-head .h2 { grid-column: 1 / span 2; }
   .how-sec .split-head .lead { grid-column: 3; justify-self: start; }
 }
+
+/* "How it works", round 4: ~92% of the full content width, centred; three equal
+   columns separated by thin vertical rules (horizontal rules on phones) */
+@media (min-width: 721px) {
+  .how-sec { max-width: none; padding-left: calc(var(--gutter) + 4%); padding-right: calc(var(--gutter) + 4%); }
+  .how-sec .route { --col-pad: clamp(24px, 2.8vw, 44px); gap: 0; }
+  .how-sec .route li { padding: 0 var(--col-pad); }
+  .how-sec .route li:first-child { padding-left: 0; }
+  .how-sec .route li:last-child { padding-right: 0; }
+  .how-sec .route li + li { border-left: 1px solid var(--line-2); }
+}
+@media (min-width: 961px) {
+  .how-sec .split-head { column-gap: 0; }
+  .how-sec .split-head .lead { padding-left: var(--col-pad, clamp(24px, 2.8vw, 44px)); }
+}
+@media (min-width: 1200px) { .how-sec .split-head .h2 { white-space: nowrap; } }
+@media (max-width: 720px) {
+  .how-sec .route { gap: 0; }
+  .how-sec .route li { padding: 22px 0; }
+  .how-sec .route li:first-child { padding-top: 0; }
+  .how-sec .route li:last-child { padding-bottom: 0; }
+  .how-sec .route li + li { border-top: 1px solid var(--line); }
+}
