@@ -144,7 +144,7 @@
   function cineHtml() {
     var k = state.slide, S = DATA.heroSlides;
     return '<section class="cine" aria-labelledby="hero-title">' +
-      '<div class="cine-slides" aria-hidden="true">' + S.map(function (x, j) { return '<img src="' + esc(x.img) + '" alt=""' + (x.pos || x.dim ? ' style="' + (x.pos ? 'object-position:' + esc(x.pos) + ';' : '') + (x.dim ? 'filter:brightness(' + Number(x.dim) + ');' : '') + '"' : '') + (j === k ? ' class="on"' : '') + '>'; }).join('') + '</div>' +
+      '<div class="cine-slides" aria-hidden="true">' + S.map(function (x, j) { return '<img src="' + esc(x.img) + '" alt=""' + (x.pos || x.dim || x.sx ? ' style="' + (x.pos ? 'object-position:' + esc(x.pos) + ';' : '') + (x.dim ? 'filter:brightness(' + Number(x.dim) + ');' : '') + (x.sx ? '--sx:' + Number(x.sx) + '%;--sz:' + Number(x.sz || 1) + ';' : '') + '"' : '') + (j === k ? ' class="on"' : '') + '>'; }).join('') + '</div>' +
       '<div class="wrap cine-bottom"><div class="cine-copy"><p class="kicker">' + esc(t('hero.overline')) + '</p>' +
       '<h1 id="hero-title"><span>' + esc(t('hero.title1')) + '</span> <span class="accent">' + esc(t('hero.title2')) + '</span></h1>' +
       '<p class="cine-sub">' + esc(t('hero.sub')) + '</p>' +
@@ -373,11 +373,11 @@
   function kmLabel(v) { return v === 'any' ? t('request.noPref') : t('unit.kmYear', { n: num(v) }); }
   function requestSummaryHtml() {
     var v = state.forms.request.values;
-    function row(label, val) { return '<div><dt>' + esc(label) + '</dt><dd' + (val ? '' : ' class="empty-val"') + '>' + esc(val || t('request.summaryEmpty')) + '</dd></div>'; }
+    function row(label, val, key) { return '<div' + (key ? ' class="key"' : '') + '><dt>' + esc(label) + '</dt><dd' + (val ? '' : ' class="empty-val"') + '>' + esc(val || t('request.summaryEmpty')) + '</dd></div>'; }
     var veh = vehText(v);
     return '<h2>' + esc(t('request.summary')) + '</h2><dl>' +
-      row(t('request.vehicleLabel'), veh) + (showBody(v) || v.body ? row(t('request.body'), v.body ? t('body.' + v.body) : '') : '') + row(t('request.fuel'), optLabel('fuel', v.fuel)) + row(t('request.color'), colorText(v)) +
-      row(t('dial.label'), v.budget ? reqBudgetFmt(Number(v.budget)) : '') + row(t('request.down'), optLabel('down', v.down)) +
+      row(t('request.vehicleLabel'), veh, true) + (showBody(v) || v.body ? row(t('request.body'), v.body ? t('body.' + v.body) : '') : '') + row(t('request.fuel'), optLabel('fuel', v.fuel)) + row(t('request.color'), colorText(v)) +
+      row(t('dial.label'), v.budget ? reqBudgetFmt(Number(v.budget)) : '', true) + row(t('request.down'), optLabel('down', v.down)) +
       row(t('request.term'), v.term ? termLabel(v.term) : '') +
       row(t('request.km'), v.km ? kmLabel(v.km) : '') +
       row(t('form.postal'), v.postal ? String(v.postal).toUpperCase() : '') +
@@ -499,9 +499,9 @@
     } else {
       form = '<h2 class="h2">' + esc(t('dealers.form.title')) + '</h2><p class="muted">' + esc(t('dealers.form.sub')) + '</p><form class="form" data-form-id="dealer" novalidate>' + errorSummary('dealer') +
         fieldHtml('dealer', 'dealership', { label: t('dealers.dealership'), required: true, autocomplete: 'organization' }) +
-        fieldHtml('dealer', 'location', { label: t('dealers.location'), required: true, placeholder: t('dealers.locationPh'), autocomplete: 'address-level2' }) +
-        '<div class="grid-2">' + fieldHtml('dealer', 'contact', { label: t('dealers.contact'), required: true, autocomplete: 'name' }) +
-        fieldHtml('dealer', 'email', { label: t('dealers.email'), type: 'email', required: true, autocomplete: 'work email' }) +
+        '<div class="grid-2">' + fieldHtml('dealer', 'location', { label: t('dealers.location'), required: true, placeholder: t('dealers.locationPh'), autocomplete: 'address-level2' }) +
+        fieldHtml('dealer', 'contact', { label: t('dealers.contact'), required: true, autocomplete: 'name' }) + '</div>' +
+        '<div class="grid-2">' + fieldHtml('dealer', 'email', { label: t('dealers.email'), type: 'email', required: true, autocomplete: 'work email' }) +
         fieldHtml('dealer', 'phone', { label: t('form.phone'), type: 'tel', autocomplete: 'work tel', inputmode: 'tel', placeholder: t('dealers.phonePh') }) + '</div>' +
         '<div class="form-foot">' + submitBtn('dealer', t('dealers.submit')) + '</div>' + honeypot() + demoNote() + '</form>';
     }
@@ -510,9 +510,9 @@
       '<p class="lead">' + esc(t('dealers.sub')) + '</p>' +
       '<button type="button" class="dealers-go" data-action="to-dealer-form"><span>' + esc(t('dealers.cta')) + '</span><span class="go-ic">' + icon('arrow') + '</span></button></div>' +
       '<button type="button" class="scroll-cue" data-action="to-dealer-form" aria-label="' + esc(t('dealers.cta')) + '"><span></span></button></section>' +
-      '<section class="wrap dealers-grid" id="dealer-join"><ol class="lanes">' + [1, 2, 3].map(function (n) {
+      '<section class="wrap dealers-grid" id="dealer-join"><div class="dealers-side"><h2 class="dealers-side-title">' + esc(t('dealers.howTitle')) + '</h2><ol class="lanes">' + [1, 2, 3].map(function (n) {
         return '<li><span class="f-no">' + pad2(n) + '</span><div><h3>' + esc(t('dealers.p' + n + '.title')) + '</h3><p class="muted">' + esc(t('dealers.p' + n + '.text')) + '</p></div></li>';
-      }).join('') + '</ol><div class="panel">' + form + '</div></section>';
+      }).join('') + '</ol></div><div class="panel">' + form + '</div></section>';
   }
   function viewNotFound() { return '<section class="wrap page-head"><h1 class="h1">' + esc(t('notFound.title')) + '</h1><a class="btn btn-primary" href="#/">' + esc(t('notFound.cta')) + '</a></section>'; }
 
@@ -617,7 +617,9 @@
       F.errors = errs;
       if (Object.keys(errs).length) { F.attempted = true; render({ keepFocus: false }); focusFirstError('request'); return; }
       F.attempted = false; F.step += 1; render({ keepFocus: false });
-      var st = document.getElementById('step-title'); if (st) { st.focus({ preventScroll: true }); st.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+      var st = document.getElementById('step-title'), fm = document.querySelector('form[data-form-id="request"]'), hd = document.querySelector('header');
+      if (st) st.focus({ preventScroll: true });
+      if (fm) { var fy = fm.getBoundingClientRect().top + window.pageYOffset - (hd ? hd.getBoundingClientRect().height : 76) - 16; window.scrollTo({ top: Math.max(0, fy), behavior: REDUCED ? 'auto' : 'smooth' }); }
       return;
     }
     F.attempted = true;

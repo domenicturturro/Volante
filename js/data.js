@@ -35,8 +35,8 @@ window.VOLANTE_DATA = {
      request form with that make, model (and trim) pre-filled. `model` must match a name in `models`. Optional: `pos` (crop focus), `dim` (brightness: below 1 darkens, above 1 brightens). Swap `img` for your own photos. */
   heroSlides: [
     { make: 'Ford', model: 'Mustang', type: ['Coupé', 'Coupe'], img: 'assets/photos/mustang.jpg', pos: '60% 58%', dim: 1.3 },
-    { make: 'Ford', model: 'Bronco', type: ['VUS', 'SUV'], img: 'assets/photos/bronco.jpg' },
-    { make: 'Ford', model: 'F-150', type: ['Camionnette', 'Pickup'], img: 'assets/photos/f150.jpg', pos: '60% 60%', dim: 1.1 },
+    { make: 'Ford', model: 'Bronco', type: ['VUS', 'SUV'], img: 'assets/photos/bronco.jpg', sx: 12, sz: 1.26, dim: 1.22 },
+    { make: 'Ford', model: 'F-150', type: ['Camionnette', 'Pickup'], img: 'assets/photos/f150.jpg', pos: '60% 60%', sx: 10, sz: 1.21, dim: 1.12 },
     { make: 'Lincoln', model: 'Aviator', type: ['VUS de luxe', 'Luxury SUV'], img: 'assets/photos/aviator.jpg', pos: '50% 62%', dim: 0.85 }
   ]
 };

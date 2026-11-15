@@ -376,7 +376,7 @@ input:disabled, select:disabled { opacity: .4; cursor: not-allowed; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .reveal { opacity: 1; transform: none; }
-  .cine-slides img { transform: none !important; }
+  .cine-slides img { transform: translateX(var(--sx, 0%)) scale(var(--sz, 1)) !important; }
   .cine-progress button.on .t::after { transform: scaleX(1); }
 }
 
@@ -791,3 +791,70 @@ html[data-theme="light"] .demo-banner { background: #e9ecf1; }
   .scroll-cue { display: none; }
   .dealers-hero + .dealers-grid { margin-top: 36px; scroll-margin-top: 72px; }
 }
+
+/* =========================================================================
+   POLISH PASS (Nov 2026): readability, clearer states, per-photo framing.
+   Previous version: _backup/before-polish/
+   ========================================================================= */
+/* secondary text: lighter and a touch bigger so it reads next to the headings */
+:root { --muted: #a9b2c2; --dim: #808a9d; }
+html[data-theme="light"] { --dim: #667084; }
+.hint { font-size: 14.5px; color: var(--muted); }
+.opt { color: var(--muted); }
+.range-scale { font-size: 14px; color: var(--muted); }
+.step-count { font-size: 14.5px; }
+.dial-unit { font-size: 15px; }
+.small { font-size: 14.5px; }
+.footer-brand p { font-size: 16px; }
+.footer-bottom { font-size: 14px; color: var(--muted); }
+
+/* one blue headline on the site (the home page); the dealers headline stays white */
+.dealers-hero .h1 em { color: inherit; }
+
+/* logo: a little more presence */
+.logo { gap: 13px; }
+.logo-mark { width: 35px; height: 24px; }
+.logo-word { font-size: 16.5px; }
+
+/* carousel: each photo framed on its own (--sx shifts the car right, --sz zooms to keep the edges covered) */
+.cine-slides img { transform: translateX(var(--sx, 0%)) scale(calc(var(--sz, 1) * 1.05)); }
+.cine-slides img.on { transform: translateX(var(--sx, 0%)) scale(var(--sz, 1)); }
+.cine-card .s { color: rgba(238,241,246,.82); }
+.cine-card .desc { color: rgba(238,241,246,.86); }
+.cine-progress button { font-size: 14.5px; color: rgba(238,241,246,.72); }
+.cine-progress button.on { font-weight: 600; }
+.cine-progress button.on .t { height: 2px; }
+
+/* request steps: current / done / upcoming are easy to tell apart */
+.steps-bar li { font-size: 15px; color: var(--muted); }
+.steps-bar li::before { height: 3px; border-radius: 2px; }
+.steps-bar li.current { color: var(--text); font-weight: 600; }
+.steps-bar li.done { color: var(--muted); }
+.steps-bar li.done::before { background: rgba(var(--accent-rgb), .5); }
+.steps-bar li.done .sb-no { font-size: 0; }
+.steps-bar li.done .sb-no::before { content: '✓'; font-size: 15px; font-weight: 600; color: var(--accent-2); }
+.step-title:focus { outline: none; }
+
+/* choice buttons: the picked one is obvious */
+.chip:has(input:checked) { border-color: var(--accent); background: rgba(var(--accent-rgb), .16); box-shadow: inset 0 0 0 1px var(--accent); color: var(--text); font-weight: 600; }
+html[data-theme="light"] .chip:has(input:checked) { background: rgba(var(--accent-rgb), .09); }
+
+/* "Your request": clearer labels, vehicle and budget stand out */
+.summary-card dt { font-size: 14.5px; }
+.summary-card dd { font-size: 15.5px; }
+.summary-card .key dt { color: var(--text); }
+.summary-card .key dd { font-family: var(--display); font-size: 18px; font-weight: 700; letter-spacing: -.01em; }
+.summary-card .key dd.empty-val { font-family: var(--sans); font-size: 15.5px; font-weight: 400; letter-spacing: 0; }
+.summary-card .small { font-size: 14.5px; color: var(--muted); }
+
+@media (max-width: 720px) {
+  .cine-slides img { --sx: 0% !important; --sz: 1 !important; }
+  .logo-mark { width: 28px; height: 19px; }
+  .logo-word { font-size: 14px; }
+}
+
+/* dealers: short heading over the three points, column centred beside the form */
+.dealers-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); align-items: center; }
+.dealers-side-title { font-family: var(--display); font-size: clamp(24px, 2vw, 30px); font-weight: 600; letter-spacing: -.015em; margin: 0 0 22px; }
+@media (max-width: 960px) { .dealers-grid { grid-template-columns: 1fr; align-items: start; } }
+@media (max-width: 720px) { .dealers-side-title { font-size: 22px; margin-bottom: 8px; } }
