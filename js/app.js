@@ -84,6 +84,17 @@
   };
   function icon(name, cls) { return '<svg class="icon ' + (cls || '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICON[name] + '</svg>'; }
 
+  /* small line icons for the icon lists (gauge, dealers, route) */
+  var LINE_IC = {
+    car: '<path d="M3 15v-3l2-5h14l2 5v3"/><path d="M3 15h18v3H3z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/>',
+    doc: '<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M10 12h5M10 16h5"/>',
+    phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1"/>',
+    inbox: '<path d="M3 13l3-8h12l3 8v6H3z"/><path d="M3 13h5l1 2h6l1-2h5"/>',
+    reply: '<path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 6 6v5"/>',
+    key: '<circle cx="8" cy="15" r="4"/><path d="m11 12 8-8M16 7l2 2M14 9l2 2"/>'
+  };
+  function lineIc(n) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + LINE_IC[n] + '</svg>'; }
+
   /* body-type outlines for the request form's chips */
   var BODY = {
     suv: { d: 'M32,106 C30,92 31,78 35,66 C38,56 43,48 52,44 L72,36 C82,33 94,32 110,32 L226,32 C240,32 250,36 258,42 L286,60 C318,63 344,68 358,74 C368,79 372,88 372,100 L370,112 L342,112 A28,28 0 0 0 286,112 L122,112 A28,28 0 0 0 66,112 L38,112 C34,112 32,110 32,106 Z', w: [94, 314], r: 24 },
@@ -247,17 +258,17 @@
       '<div class="range"><label class="label" for="dial-range" style="position:absolute;left:-9999px">' + esc(t('dial.label')) + '</label>' +
       '<input type="range" id="dial-range" data-dial min="' + B_MIN + '" max="' + B_MAX + '" step="' + B_STEP + '" value="' + v + '" style="--pct:' + pct(v, B_MIN, B_MAX) + '" aria-valuetext="' + esc(budgetLabel(v)) + '">' +
       '<div class="range-scale" aria-hidden="true"><span>' + money(B_MIN) + '</span><span>' + esc(t('dial.noLimit')) + '</span></div></div></div>' +
-      '<div class="dial-right"><p class="dial-count">' + esc(t('dial.next')) + '</p>' + pickedHtml() + '<ol class="next-list">' +
-      [1, 2, 3].map(function (n) { return '<li><span class="f-no">' + pad2(n) + '</span><div><strong>' + esc(t('dial.s' + n)) + '</strong><span>' + esc(t('dial.s' + n + 't')) + '</span></div></li>'; }).join('') +
-      '</ol><div class="dial-go"><button type="button" class="btn btn-primary btn-lg" data-action="dial-go">' + esc(t('dial.cta')) + icon('arrow') + '</button><span class="time-note">' + esc(t('dial.time')) + '</span></div></div></div></section>' +
+      '<div class="dial-right"><p class="dial-count">' + esc(t('dial.next')) + '</p>' + pickedHtml() + '<ul class="next-list ic-list">' +
+      [1, 2, 3].map(function (n) { return '<li><span class="li-ic">' + lineIc(['car', 'doc', 'phone'][n - 1]) + '</span><div><strong>' + esc(t('dial.s' + n)) + '</strong><span>' + esc(t('dial.s' + n + 't')) + '</span></div></li>'; }).join('') +
+      '</ul><div class="dial-go"><button type="button" class="btn btn-primary btn-lg" data-action="dial-go">' + esc(t('dial.cta')) + icon('arrow') + '</button><span class="time-note">' + esc(t('dial.time')) + '</span></div></div></div></section>' +
 
       '<section class="statement reveal" aria-labelledby="statement-title"><img src="' + esc(bronco.img) + '" alt="" loading="lazy">' +
       '<div class="wrap statement-in"><h2 id="statement-title">' + esc(t('statement.title')) + '</h2><p>' + esc(t('statement.cap')) + '</p></div></section>' +
 
       '<section class="wrap section reveal" aria-labelledby="how-title">' + secHead(2, 'how.kicker', 'how') +
       '<div class="split split-head"><h2 id="how-title" class="h2">' + esc(t('how.title')) + '</h2><p class="lead">' + esc(t('handoff')) + '</p></div>' +
-      '<ol class="steps">' + [1, 2, 3].map(function (n) {
-        return '<li><span class="step-no">' + pad2(n) + '</span><h3>' + esc(t('how.' + n + '.title')) + '</h3><p>' + esc(t('how.' + n + '.text')) + '</p></li>';
+      '<ol class="route">' + [1, 2, 3].map(function (n) {
+        return '<li><span class="stop">' + (n < 3 ? n : lineIc('key')) + '</span><h3>' + esc(t('how.' + n + '.title')) + '</h3><p>' + esc(t('how.' + n + '.text')) + '</p></li>';
       }).join('') + '</ol>' +
       '<div class="row-btns"><a class="btn btn-primary btn-lg" href="#/budget">' + esc(t('hero.primary')) + icon('arrow') + '</a></div></section>' +
 
@@ -429,8 +440,10 @@
       return '<section class="wrap section done-wrap"><div class="done-grid">' +
         '<div class="confirm" tabindex="-1" id="confirm"><span class="icon-ring">' + icon('check') + '</span><h1 class="h1">' + esc(t('request.done.title', { name: d.firstName })) + '</h1>' +
         '<p class="lead">' + esc(t('request.done.text', { name: d.firstName })) + '</p>' +
-        '<h2 class="done-next-title">' + esc(t('done.nextTitle')) + '</h2><ol class="next-list">' + [1, 2, 3].map(function (n) {
-          return '<li><span class="f-no">' + pad2(n) + '</span><div><strong>' + esc(t('done.n' + n)) + '</strong><span>' + esc(t('done.n' + n + 't')) + '</span></div></li>';
+        '<h2 class="done-next-title">' + esc(t('done.trackTitle')) + '</h2><ol class="track">' +
+        '<li class="done"><span class="dot">' + icon('check') + '</span><div><strong>' + esc(t('done.track0')) + '<span class="when">' + esc(t('done.now')) + '</span></strong>' + (d.ref ? '<span>' + esc(t('done.track0t', { ref: d.ref })) + '</span>' : '') + '</div></li>' +
+        [1, 2, 3].map(function (n) {
+          return '<li><span class="dot"></span><div><strong>' + esc(t('done.n' + n)) + '</strong><span>' + esc(t('done.n' + n + 't')) + '</span></div></li>';
         }).join('') + '</ol>' +
         '<div class="row-btns"><a class="btn btn-primary btn-lg" href="#/">' + esc(t('request.done.home')) + icon('arrow') + '</a><button type="button" class="btn btn-ghost btn-lg" data-action="reset-form" data-form-id="request">' + esc(t('request.done.again')) + '</button></div></div>' +
         '<aside class="done-card ticket">' + doneBanner() + '<div class="t-band"><div class="t-top"><span class="t-wm">VOLΛNTE</span>' + (d.ref ? '<span class="t-ref">' + esc(t('done.ref', { ref: d.ref })) + '</span>' : '') + '</div>' +
@@ -510,9 +523,9 @@
       '<p class="lead">' + esc(t('dealers.sub')) + '</p>' +
       '<button type="button" class="dealers-go" data-action="to-dealer-form"><span>' + esc(t('dealers.cta')) + '</span><span class="go-ic">' + icon('arrow') + '</span></button></div>' +
       '<button type="button" class="scroll-cue" data-action="to-dealer-form" aria-label="' + esc(t('dealers.cta')) + '"><span></span></button></section>' +
-      '<section class="wrap dealers-grid" id="dealer-join"><div class="dealers-side"><h2 class="dealers-side-title">' + esc(t('dealers.howTitle')) + '</h2><ol class="lanes">' + [1, 2, 3].map(function (n) {
-        return '<li><span class="f-no">' + pad2(n) + '</span><div><h3>' + esc(t('dealers.p' + n + '.title')) + '</h3><p class="muted">' + esc(t('dealers.p' + n + '.text')) + '</p></div></li>';
-      }).join('') + '</ol></div><div class="panel">' + form + '</div></section>';
+      '<section class="wrap dealers-grid" id="dealer-join"><div class="dealers-side"><h2 class="dealers-side-title">' + esc(t('dealers.howTitle')) + '</h2><ul class="lanes ic-list">' + [1, 2, 3].map(function (n) {
+        return '<li><span class="li-ic">' + lineIc(['inbox', 'reply', 'key'][n - 1]) + '</span><div><h3>' + esc(t('dealers.p' + n + '.title')) + '</h3><p class="muted">' + esc(t('dealers.p' + n + '.text')) + '</p></div></li>';
+      }).join('') + '</ul></div><div class="panel">' + form + '</div></section>';
   }
   function viewNotFound() { return '<section class="wrap page-head"><h1 class="h1">' + esc(t('notFound.title')) + '</h1><a class="btn btn-primary" href="#/">' + esc(t('notFound.cta')) + '</a></section>'; }
 

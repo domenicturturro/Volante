@@ -583,7 +583,8 @@ Object.assign(window.VOLANTE_I18N.fr, {
   'done.n3': 'Vous choisissez', 'done.n3t': 'Le concessionnaire choisi confirme les détails et signe la location avec vous.',
   'dealers.sub': 'Des clients du Grand Montréal nous disent quel véhicule ils veulent louer. On vous transmet leur demande, et vous répondez avec vos offres.',
   'dealers.form.sub': 'Laissez-nous vos coordonnées. Quelqu’un de l’équipe Volante vous appellera ou vous écrira.',
-  'dealers.howTitle': 'Comment ça fonctionne pour vous'
+  'dealers.howTitle': 'Comment ça fonctionne pour vous',
+  'done.trackTitle': 'Où en est votre demande', 'done.track0': 'Demande reçue', 'done.now': 'À l’instant', 'done.track0t': 'Référence {ref}'
 });
 Object.assign(window.VOLANTE_I18N.en, {
   'hero.title1': 'Your next lease,',
@@ -612,5 +613,6 @@ Object.assign(window.VOLANTE_I18N.en, {
   'done.n3': 'You choose', 'done.n3t': 'The dealership you pick confirms the details and signs the lease with you.',
   'dealers.sub': 'Greater Montréal customers tell us what they want to lease. We pass their request on to you, and you reply with your offers.',
   'dealers.form.sub': 'Leave your details and someone from the Volante team will call or email you.',
-  'dealers.howTitle': 'How it works for your dealership'
+  'dealers.howTitle': 'How it works for your dealership',
+  'done.trackTitle': 'Where your request is', 'done.track0': 'Request received', 'done.now': 'Just now', 'done.track0t': 'Reference {ref}'
 });

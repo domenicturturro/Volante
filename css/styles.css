@@ -858,3 +858,55 @@ html[data-theme="light"] .chip:has(input:checked) { background: rgba(var(--accen
 .dealers-side-title { font-family: var(--display); font-size: clamp(24px, 2vw, 30px); font-weight: 600; letter-spacing: -.015em; margin: 0 0 22px; }
 @media (max-width: 960px) { .dealers-grid { grid-template-columns: 1fr; align-items: start; } }
 @media (max-width: 720px) { .dealers-side-title { font-size: 22px; margin-bottom: 8px; } }
+
+/* =========================================================================
+   LISTS PASS (Nov 2026): numbers only where order matters.
+   A3 icons by the gauge · B2 route · C2 dealer icons · D2 status tracker
+   Previous version: _backup/before-lists/
+   ========================================================================= */
+/* icon lists (gauge + dealers) */
+.ic-list { list-style: none; padding: 0; }
+.next-list.ic-list li { grid-template-columns: 44px 1fr; }
+.lanes.ic-list li { grid-template-columns: 52px 1fr; }
+.li-ic { color: var(--accent-2); padding-top: 3px; }
+.lanes .li-ic { padding-top: 4px; }
+.li-ic svg { display: block; width: 22px; height: 22px; }
+
+/* B2 — route: three evenly spaced stops; the dashed line runs stop to stop and ends at the key */
+.route { --rg: clamp(24px, 3vw, 48px); list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--rg); }
+.route li { position: relative; display: grid; gap: 12px; align-content: start; }
+.route li:not(:last-child)::after { content: ''; position: absolute; top: 23px; left: 48px; right: calc(-1 * var(--rg)); height: 2px;
+  background: repeating-linear-gradient(90deg, var(--line-2) 0 12px, transparent 12px 20px); }
+.route .stop { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; margin-bottom: 14px;
+  border: 2px solid var(--accent); background: var(--bg); color: var(--text); font-weight: 700; font-size: 17px; font-variant-numeric: tabular-nums; }
+.route li:last-child .stop { background: var(--accent); }
+.route .stop svg { width: 22px; height: 22px; color: #fff; }
+.route h3 { font-family: var(--display); font-size: 24px; letter-spacing: -.012em; }
+.route p { color: var(--muted); font-size: 16px; max-width: 380px; }
+
+/* D2 — status tracker: one continuous line, stops at the last marker */
+.track { list-style: none; padding: 0; margin-top: 14px; width: 100%; display: grid; }
+.track li { position: relative; display: grid; grid-template-columns: 40px 1fr; padding-bottom: 26px; }
+.track li:last-child { padding-bottom: 0; }
+.track li:not(:last-child)::after { content: ''; position: absolute; left: 12px; top: 13px; bottom: -13px; width: 2px; background: var(--line-2); }
+.track .dot { position: relative; z-index: 1; width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--line-2); background: var(--bg); display: grid; place-items: center; }
+.track li.done .dot { background: var(--accent); border-color: var(--accent); }
+.track .dot svg { width: 14px; height: 14px; color: #fff; stroke-width: 3; }
+.track strong { display: block; font-family: var(--display); font-weight: 700; font-size: 19px; letter-spacing: -.01em; line-height: 1.35; }
+.track li:not(.done) strong { color: var(--muted); }
+.track div > span { display: block; font-size: 15px; color: var(--muted); margin-top: 2px; }
+.track .when { font-family: var(--sans); font-size: 13.5px; font-weight: 600; letter-spacing: 0; color: var(--accent-2); margin-left: 10px; }
+
+@media (max-width: 720px) {
+  .route { gap: 26px; grid-template-columns: 1fr; }
+  .route li { grid-template-columns: 44px 1fr; column-gap: 14px; row-gap: 4px; }
+  .route .stop { grid-row: 1 / span 2; width: 44px; height: 44px; margin: 0; font-size: 16px; }
+  .route li:not(:last-child)::after { top: 44px; left: 21px; right: auto; width: 2px; height: auto; bottom: -26px;
+    background: repeating-linear-gradient(180deg, var(--line-2) 0 10px, transparent 10px 17px); }
+  .route h3 { font-size: 19px; }
+  .route p { font-size: 15px; }
+  .lanes.ic-list li, .next-list.ic-list li { grid-template-columns: 38px 1fr; }
+  .track li { padding-bottom: 16px; }
+  .track strong { font-size: 17px; }
+  .track li:not(.done) div > span { display: none; }
+}
