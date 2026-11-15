@@ -910,3 +910,10 @@ html[data-theme="light"] .chip:has(input:checked) { background: rgba(var(--accen
   .track strong { font-size: 17px; }
   .track li:not(.done) div > span { display: none; }
 }
+
+/* route, round 2: no connecting line; the three steps spread edge to edge so the
+   text's left and right margins match (columns are capped at the text width) */
+.route li::after { content: none !important; }
+.route { grid-template-columns: repeat(3, minmax(0, 360px)); justify-content: space-between; }
+.route p { max-width: none; }
+@media (max-width: 720px) { .route { grid-template-columns: 1fr; } }
