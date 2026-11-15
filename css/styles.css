@@ -917,3 +917,19 @@ html[data-theme="light"] .chip:has(input:checked) { background: rgba(var(--accen
 .route { grid-template-columns: repeat(3, minmax(0, 360px)); justify-content: space-between; }
 .route p { max-width: none; }
 @media (max-width: 720px) { .route { grid-template-columns: 1fr; } }
+
+/* "How it works", round 3: one narrower centred block — label, heading, intro,
+   three equal columns and the button all share the same edges */
+.how-sec .route { justify-content: stretch; }
+@media (min-width: 721px) {
+  .how-sec { max-width: calc(1120px + 2 * var(--gutter)); padding-top: clamp(40px, 3.5vw, 56px); }
+  .how-sec .route h3 { font-size: 22px; line-height: 1.22; }
+  .how-sec .sec-head { margin-bottom: 36px; }
+  .how-sec .route { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 56px; }
+  .how-sec .row-btns { margin-top: 44px; }
+}
+@media (min-width: 961px) {
+  .how-sec .split-head { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 56px; margin-bottom: 52px; }
+  .how-sec .split-head .h2 { grid-column: 1 / span 2; }
+  .how-sec .split-head .lead { grid-column: 3; justify-self: start; }
+}

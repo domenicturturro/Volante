@@ -194,28 +194,6 @@
   }, { passive: true });
   /* phones: a "make a request" button stays at the bottom once the top of the page is out of view.
      It steps aside whenever another request button is on screen, and over the footer. */
-  /* "How it works" route: the three steps' text wraps unevenly (and differently in FR/EN),
-     so measure the real text edges and nudge the group until the left and right margins match */
-  function balanceRoute() {
-    var ol = document.querySelector('.route');
-    if (!ol) return;
-    ol.style.transform = '';
-    if (window.matchMedia('(max-width: 720px)').matches) return;
-    var L = Infinity, R = -Infinity;
-    ol.querySelectorAll('.stop, h3, p').forEach(function (el) {
-      var rects = [];
-      if (el.classList.contains('stop')) rects.push(el.getBoundingClientRect());
-      else { var rg = document.createRange(); rg.selectNodeContents(el); rects = Array.prototype.slice.call(rg.getClientRects()); }
-      rects.forEach(function (r) { if (r.width) { L = Math.min(L, r.left); R = Math.max(R, r.right); } });
-    });
-    if (L === Infinity) return;
-    var shift = ((document.documentElement.clientWidth - R) - L) / 2;
-    if (Math.abs(shift) > 1) ol.style.transform = 'translateX(' + shift.toFixed(1) + 'px)';
-  }
-  var routeTimer;
-  window.addEventListener('resize', function () { clearTimeout(routeTimer); routeTimer = setTimeout(balanceRoute, 120); });
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(balanceRoute);
-
   function updateMobileCta() {
     var b = document.getElementById('m-cta');
     if (!b) return;
@@ -287,7 +265,7 @@
       '<section class="statement reveal" aria-labelledby="statement-title"><img src="' + esc(bronco.img) + '" alt="" loading="lazy">' +
       '<div class="wrap statement-in"><h2 id="statement-title">' + esc(t('statement.title')) + '</h2><p>' + esc(t('statement.cap')) + '</p></div></section>' +
 
-      '<section class="wrap section reveal" aria-labelledby="how-title">' + secHead(2, 'how.kicker', 'how') +
+      '<section class="wrap section reveal how-sec" aria-labelledby="how-title">' + secHead(2, 'how.kicker', 'how') +
       '<div class="split split-head"><h2 id="how-title" class="h2">' + esc(t('how.title')) + '</h2><p class="lead">' + esc(t('handoff')) + '</p></div>' +
       '<ol class="route">' + [1, 2, 3].map(function (n) {
         return '<li><span class="stop">' + (n < 3 ? n : lineIc('key')) + '</span><h3>' + esc(t('how.' + n + '.title')) + '</h3><p>' + esc(t('how.' + n + '.text')) + '</p></li>';
@@ -584,7 +562,6 @@
       (r.name === 'home' ? '<a class="m-only m-cta" id="m-cta" href="#/budget" tabindex="-1" aria-hidden="true">' + esc(t('nav.cta')) + icon('arrow') + '</a>' : '');
     document.documentElement.classList.toggle('nav-open', !!state.navOpen);
     updateMobileCta();
-    balanceRoute();
     if (window.VolanteSelect) window.VolanteSelect.enhance(app); // styled dropdowns (js/select.js)
     Array.prototype.forEach.call(document.querySelectorAll('.reveal'), function (el, i) {
       var key = r.name + i;
